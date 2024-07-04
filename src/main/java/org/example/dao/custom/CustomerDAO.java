@@ -1,4 +1,7 @@
 package org.example.dao.custom;
 
-public class CustomerDAO {
+import org.example.dao.CrudDAO;
+import org.example.entity.Customer;
+
+public interface CustomerDAO extends CrudDAO<Customer> {
 }

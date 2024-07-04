@@ -14,6 +14,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.example.bo.BOFactory;
+import org.example.bo.custom.CustomerBO;
+import org.example.dao.custom.CustomerDAO;
 import org.example.dto.CustomerDTO;
 import org.example.entity.Customer;
 /*import lk.ijse.citroessentional.Util.Regex;
@@ -66,6 +69,8 @@ public class CustomerFormController {
 
     private List<Customer> customerList = new ArrayList<>();
 
+    CustomerBO customerBO  = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
+
     public void initialize() {
         this.customerList = getAllCustomers();
         setCellValueFactory();
@@ -80,27 +85,25 @@ public class CustomerFormController {
     }
 
     private void loadCustomerTable() {
-        ObservableList<CustomerDTO> tmList = FXCollections.observableArrayList();
+        tblCustomer.getItems().clear();
+        try {
+            /*Get all customers*/
+            ArrayList<CustomerDTO> allCustomers = customerBO.getAllCustomers();
 
-        for (Customer customer : customerList) {
-            CustomerDTO customerDTO = new CustomerDTO(
-                    customer.getId(),
-                    customer.getName(),
-                    customer.getTel(),
-                    customer.getAddress()
-            );
-
-            tmList.add(customerDTO);
+            for (CustomerDTO c : allCustomers) {
+                tblCustomers.getItems().add(new CustomerTM(c.getId(), c.getName(),c.getTel(), c.getAddress()));
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
-        tblCustomer.setItems(tmList);
-        CustomerDTO selectedItem = (CustomerDTO) tblCustomer.getSelectionModel().getSelectedItem();
-        System.out.println("selectedItem = " + selectedItem);
     }
 
     private List<Customer> getAllCustomers() {
         List<Customer> customerList = null;
         try {
-            customerList = CustomerRepo.getAll();
+            customerList = CustomerDAO.getAll();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -119,11 +122,13 @@ public class CustomerFormController {
 
        if (isValid()) {
             try {
-                boolean isSaved = CustomerRepo.save(customer);
+                boolean isSaved = CustomerDAO .save(customer);
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "customer saved!").show();
                     initialize();
                 }
+                customerBO.addCustomer(new CustomerDTO(id,name,tel,address));
+                tblCustomers.getItems().add(new CustomerTM(id, name,tel, address));
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
@@ -219,4 +224,4 @@ public class CustomerFormController {
         public void txtCustomerAddressOnKeyReleased(KeyEvent keyEvent) {
                 Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ADDRESS,txtAddress);*/
     }
-}
+
