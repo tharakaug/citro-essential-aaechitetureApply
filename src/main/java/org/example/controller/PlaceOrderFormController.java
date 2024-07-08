@@ -12,17 +12,22 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.citroessentional.Util.Regex;
+import org.example.dao.custom.CustomerDAO;
+import org.example.dao.custom.PlaceOrderDAO;
+import org.example.entity.*;
+import org.example.dao.custom.OrderDAO;
+/*import lk.ijse.citroessentional.Util.Regex;
 import lk.ijse.citroessentional.model.*;
 import lk.ijse.citroessentional.model.tm.CartTm;
 import lk.ijse.citroessentional.repository.CustomerRepo;
 import lk.ijse.citroessentional.repository.ItemRepo;
 import lk.ijse.citroessentional.repository.OrderRepo;
-import lk.ijse.citroessentional.repository.PlaceOrderRepo;
+import lk.ijse.citroessentional.repository.PlaceOrderRepo;*/
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import org.example.dao.custom.ItemDAO;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -110,7 +115,7 @@ public class PlaceOrderFormController {
     private void getItemCodes() {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<String> codeList = ItemRepo.getId();
+            List<String> codeList = ItemDAO.getId();
             for (String code : codeList) {
                 obList.add(code);
             }
@@ -127,7 +132,7 @@ public class PlaceOrderFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> idList = CustomerRepo.getId();
+            List<String> idList = CustomerDAO.getId();
 
             for (String id : idList) {
                 obList.add(id);
@@ -245,9 +250,9 @@ public class PlaceOrderFormController {
         }
         PlaceOrder po = new PlaceOrder(order, odList);
 
-        if (isValid()) {
+       // if (isValid()) {
             try {
-                boolean isPlaced = PlaceOrderRepo.placeOrder(po);
+                boolean isPlaced = PlaceOrderDAO.placeOrder(po);
                 if (isPlaced) {
                     new Alert(Alert.AlertType.CONFIRMATION, "order placed!").show();
                 } else {
@@ -256,7 +261,7 @@ public class PlaceOrderFormController {
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
-        }
+       // }
     }
 
     @FXML
@@ -268,7 +273,7 @@ public class PlaceOrderFormController {
         Order order = new Order(id,date,cusId);
 
         try {
-            boolean isUpdated = OrderRepo.update(order);
+            boolean isUpdated = OrderDAO.update(order);
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "order updated!").show();
             }
@@ -282,7 +287,7 @@ public class PlaceOrderFormController {
         String cusId = cmbCusId.getValue();
 
         try {
-            Customer customer = CustomerRepo.searchById(cusId);
+            Customer customer = CustomerDAO.searchById(cusId);
 
             lblCusName.setText(customer.getName());
 
@@ -295,7 +300,7 @@ public class PlaceOrderFormController {
     void cmbItemIDOnAction(ActionEvent event) {
         String itemId =  cmbItemId.getValue();
         try {
-            Item item = ItemRepo.searchById(itemId);
+            Item item = ItemDAO.searchById(itemId);
             if (item != null) {
                 lblUnitPrice.setText(String.valueOf(item.getPrice()));
             }
@@ -324,7 +329,7 @@ public class PlaceOrderFormController {
 }
     }
 
-    public void txtOrderIDOnKeyReleased(KeyEvent keyEvent) {
+  /*  public void txtOrderIDOnKeyReleased(KeyEvent keyEvent) {
         Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtId);
     }
 
@@ -341,6 +346,6 @@ public class PlaceOrderFormController {
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.QTY,txtQty)) return false;
 
         return true;
-    }
+    }*/
 
 }

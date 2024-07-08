@@ -1,13 +1,12 @@
-package org.example.entity;
+package org.example.view.tdm;
 
-
-public class Customer { // this model class represent real world customer entity
+public class CustomerTM implements Comparable<CustomerTM> {
     private String id;
     private String name;
     private String tel;
     private String address;
 
-    public Customer(String id, String name,String tel, String address) {
+    public CustomerTM(String id, String name,String tel, String address) {
         this.id = id;
         this.name = name;
         this.tel = tel;
@@ -30,24 +29,15 @@ public class Customer { // this model class represent real world customer entity
     }
 
     public String getTel() {
-
         return tel;
     }
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-
     public String getAddress() {
-
         return address;
     }
-    public void setAddress(String address) {
-        this.address = address;
-    }
+
     @Override
     public String toString() {
-        return "Customer{" +
+        return "CustomerTM{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", tel='" + tel + '\'' +
@@ -55,4 +45,8 @@ public class Customer { // this model class represent real world customer entity
                 '}';
     }
 
+    @Override
+    public int compareTo(CustomerTM o) {
+        return id.compareTo(o.getId());
+    }
 }

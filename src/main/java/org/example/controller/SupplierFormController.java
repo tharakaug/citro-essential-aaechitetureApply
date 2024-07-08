@@ -14,10 +14,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.citroessentional.Util.Regex;
+import org.example.dao.custom.SupplierDAO;
+import org.example.entity.Supplier;
+/*import lk.ijse.citroessentional.Util.Regex;
 import lk.ijse.citroessentional.model.Supplier;
 import lk.ijse.citroessentional.model.tm.SupplierTm;
-import lk.ijse.citroessentional.repository.SupplierRepo;
+import lk.ijse.citroessentional.repository.SupplierRepo;*/
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -84,7 +86,7 @@ public class SupplierFormController {
     private List<Supplier> getAllSupplier() {
         List<Supplier> suppierList = null;
         try {
-            suppierList = SupplierRepo.getAll();
+            suppierList = SupplierDAO.getAll();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -99,16 +101,16 @@ public class SupplierFormController {
 
         Supplier supplier = new Supplier(id, name, tel);
 
-        if (isValid()) {
+        //if (isValid()) {
             try {
-                boolean isSaved = SupplierRepo.save(supplier);
+                boolean isSaved = SupplierDAO.save(supplier);
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "supplier saved!").show();
                 }
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
-        }
+      //  }
     }
 
     @FXML
@@ -127,7 +129,7 @@ public class SupplierFormController {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = SupplierRepo.delete(id);
+            boolean isDeleted = SupplierDAO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "supplier deleted!").show();
             }
@@ -148,7 +150,7 @@ public class SupplierFormController {
         Supplier supplier = new Supplier(id, name, tel);
 
         try {
-            boolean isUpdated = SupplierRepo.update(supplier);
+            boolean isUpdated = SupplierDAO.update(supplier);
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Supplier updated!").show();
             }
@@ -163,7 +165,7 @@ public class SupplierFormController {
         String id = txtId.getText();
 
         try {
-            Supplier supplier = SupplierRepo.searchById(id);
+            Supplier supplier = SupplierDAO.searchById(id);
 
             if (supplier != null) {
                 txtId.setText(supplier.getId());
@@ -177,7 +179,7 @@ public class SupplierFormController {
         }
     }
 
-    public void txtSupcontactOnKeyReleased(KeyEvent keyEvent) {
+    /*public void txtSupcontactOnKeyReleased(KeyEvent keyEvent) {
         Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.CONTACT, txtContact);
     }
 
@@ -196,6 +198,6 @@ public class SupplierFormController {
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.CONTACT,txtContact)) return false;
 
         return true;
-    }
+    }*/
 
 }

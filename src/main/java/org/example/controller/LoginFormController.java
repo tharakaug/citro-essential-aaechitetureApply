@@ -39,16 +39,16 @@ public class LoginFormController {
         /*if (isValid()) {*/
         try {
             checkCredential(username,pw);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, "OOPS! something went wrong").show();
         }
         }
     //}
 
-    private void checkCredential(String username, String pw) throws SQLException,IOException{
+    private void checkCredential(String username, String pw) throws SQLException, IOException, ClassNotFoundException {
         String sql = "SELECT user_username, user_password FROM user WHERE user_username = ?";
 
-        Connection connection = DbConnection.getInstance().getConnection();
+        Connection connection = DbConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setObject(1, username);
 

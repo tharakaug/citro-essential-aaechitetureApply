@@ -14,10 +14,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.citroessentional.Util.Regex;
+import org.example.entity.Material;
+/*import lk.ijse.citroessentional.Util.Regex;
 import lk.ijse.citroessentional.model.Material;
 import lk.ijse.citroessentional.model.tm.MaterialTm;
-import lk.ijse.citroessentional.repository.MaterialRepo;
+import lk.ijse.citroessentional.repository.MaterialRepo;*/
 
 import java.io.IOException;
 import java.sql.SQLException;

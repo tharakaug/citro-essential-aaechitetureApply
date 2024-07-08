@@ -1,20 +1,21 @@
 package org.example.dto;
 
-
 import java.io.Serializable;
 
-public class CustomerDTO implements Serializable {
+public class ItemDTO implements Serializable {
     private String id;
     private String name;
-    private String tel;
-    private String address;
+    private double price;
+    private int qty;
 
-    public CustomerDTO(String id, String name,String tel, String address) {
+    public ItemDTO(String id, String name, double price, int qty) {
+
         this.id = id;
         this.name = name;
-        this.tel = tel;
-        this.address = address;
+        this.price = price;
+        this.qty = qty;
     }
+
     public String getId() {
         return id;
     }
@@ -31,20 +32,28 @@ public class CustomerDTO implements Serializable {
         this.name = name;
     }
 
-    public String getTel() {
-        return tel;
-    }
-    public String getAddress() {
-        return address;
+    public double getPrice() {
+        return price;
     }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
+    }
     @Override
     public String toString() {
-        return "CustomerDTO{" +
+        return "ItemDTO{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", tel='" + tel + '\'' +
-                ", address='" + address + '\'' +
+                ", price='" + price + '\'' +
+                ", qty='" + qty + '\'' +
                 '}';
     }
 

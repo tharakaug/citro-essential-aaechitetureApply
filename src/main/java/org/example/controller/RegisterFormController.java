@@ -5,8 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
-import lk.ijse.citroessentional.Util.Regex;
-import lk.ijse.citroessentional.db.DbConnection;
+/*import lk.ijse.citroessentional.Util.Regex;
+import lk.ijse.citroessentional.db.DbConnection;*/
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

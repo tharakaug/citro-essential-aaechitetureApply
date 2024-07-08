@@ -1,17 +1,19 @@
 package org.example.entity;
 
-
-public class Customer { // this model class represent real world customer entity
+public class Employee {
     private String id;
     private String name;
-    private String tel;
     private String address;
+    private String tel;
+    private String mashId;
 
-    public Customer(String id, String name,String tel, String address) {
+    public Employee(String id, String name,String address, String tel,String mashId) {
+
         this.id = id;
         this.name = name;
-        this.tel = tel;
         this.address = address;
+        this.tel = tel;
+        this.mashId = mashId;
     }
     public String getId() {
         return id;
@@ -21,7 +23,7 @@ public class Customer { // this model class represent real world customer entity
         this.id = id;
     }
 
-    public String getName() {
+    public String getName(){
         return name;
     }
 
@@ -29,8 +31,15 @@ public class Customer { // this model class represent real world customer entity
         this.name = name;
     }
 
-    public String getTel() {
+    public String getAddress(){
+        return address;
+    }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getTel(){
         return tel;
     }
 
@@ -38,20 +47,18 @@ public class Customer { // this model class represent real world customer entity
         this.tel = tel;
     }
 
-    public String getAddress() {
+    public String getMashId(){
+        return mashId;
+    }
 
-        return address;
-    }
-    public void setAddress(String address) {
-        this.address = address;
-    }
     @Override
     public String toString() {
-        return "Customer{" +
+        return "Employee{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", tel='" + tel + '\'' +
                 ", address='" + address + '\'' +
+                ", tel='" + tel + '\'' +
+                ", mashId='" + mashId + '\'' +
                 '}';
     }
 

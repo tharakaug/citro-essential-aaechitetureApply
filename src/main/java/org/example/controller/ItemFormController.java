@@ -14,6 +14,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.example.dao.custom.ItemDAO;
+import org.example.entity.Item;
 /*import lk.ijse.citroessentional.Util.Regex;
 import lk.ijse.citroessentional.Util.TextField;
 import lk.ijse.citroessentional.model.Item;
@@ -93,7 +95,7 @@ public class ItemFormController {
     private List<Item> getAllItem() {
         List<Item> itemList = null;
         try {
-            itemList = ItemRepo.getAll();
+            itemList = ItemDAO.getAll();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -109,16 +111,16 @@ public class ItemFormController {
 
         Item item = new Item(id, name, price, qty);
 
-        if (isValid()) {
+      //  if (isValid()) {
             try {
-                boolean isSaved = ItemRepo.save(item);
+                boolean isSaved = ItemDAO.save(item);
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "item saved!").show();
                 }
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
-        }
+      //  }
 
     }
 
@@ -132,7 +134,7 @@ public class ItemFormController {
         Item item = new Item(id, name, price, qty);
 
         try {
-            boolean isUpdated = ItemRepo.update(item);
+            boolean isUpdated = ItemDAO.update(item);
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "item updated!").show();
             }
@@ -146,7 +148,7 @@ public class ItemFormController {
         String id = txtId.getText();
 
         try {
-            Item item = ItemRepo.searchById(id);
+            Item item = ItemDAO.searchById(id);
 
             if (item != null) {
                 txtId.setText(item.getId());
@@ -159,7 +161,7 @@ public class ItemFormController {
         }
     }
 
-    public void txtItemIDOnKeyReleased(KeyEvent keyEvent) {
+  /*  public void txtItemIDOnKeyReleased(KeyEvent keyEvent) {
         Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID, txtId);
     }
 
@@ -183,7 +185,7 @@ public class ItemFormController {
         if (!Regex.setTextColor(TextField.QTY, txtQty)) return false;
 
         return true;
-    }
+    }*/
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/dashboard_form.fxml"));
@@ -198,7 +200,7 @@ public class ItemFormController {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = ItemRepo.delete(id);
+            boolean isDeleted = ItemDAO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "item deleted!").show();
             }

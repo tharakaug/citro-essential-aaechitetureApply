@@ -1,13 +1,15 @@
-package org.example.entity;
+package org.example.model;
 
+import java.io.Serializable;
 
-public class Customer { // this model class represent real world customer entity
+public class CustomerDTO implements Serializable {
+
     private String id;
     private String name;
     private String tel;
     private String address;
 
-    public Customer(String id, String name,String tel, String address) {
+    public CustomerDTO(String id, String name,String tel, String address) {
         this.id = id;
         this.name = name;
         this.tel = tel;
@@ -30,24 +32,15 @@ public class Customer { // this model class represent real world customer entity
     }
 
     public String getTel() {
-
         return tel;
     }
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-
     public String getAddress() {
-
         return address;
     }
-    public void setAddress(String address) {
-        this.address = address;
-    }
+
     @Override
     public String toString() {
-        return "Customer{" +
+        return "CustomerDTO{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", tel='" + tel + '\'' +

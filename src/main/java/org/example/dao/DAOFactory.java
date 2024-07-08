@@ -1,16 +1,33 @@
 package org.example.dao;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
+import org.example.dao.custom.impl.*;
 
-public class DAOFactory extends Application {
+public class DAOFactory {
 
-    public static void main(String[] args) {
-        launch(args);
+    private static DAOFactory daoFactory;
+
+    private DAOFactory() {
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-
+    public static DAOFactory getDaoFactory() {
+        return (daoFactory == null) ? daoFactory = new DAOFactory() : daoFactory;
     }
+
+    public enum DAOTypes {
+        CUSTOMER,EMPLOYEE,ITEM
+    }
+
+    public SuperDAO getDAO(DAOTypes types){
+        switch (types) {
+            case CUSTOMER:
+                return new CustomerDAOImpl();
+            case EMPLOYEE:
+                return new EmployeeDAOImpl();
+            case ITEM:
+                return new ItemDAOImpl();
+            default:
+                return null;
+        }
+    }
+
 }

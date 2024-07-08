@@ -19,6 +19,7 @@ import org.example.bo.custom.CustomerBO;
 import org.example.dao.custom.CustomerDAO;
 import org.example.dto.CustomerDTO;
 import org.example.entity.Customer;
+import org.example.view.tdm.CustomerTM;
 /*import lk.ijse.citroessentional.Util.Regex;
 import lk.ijse.citroessentional.Util.TextField;
 import lk.ijse.citroessentional.model.Customer;
@@ -53,7 +54,7 @@ public class CustomerFormController {
     private AnchorPane root;
 
     @FXML
-    private TableView<CustomerDTO> tblCustomer;
+    private TableView<CustomerTM> tblCustomers;
 
     @FXML
     private JFXTextField txtAddress;
@@ -85,7 +86,7 @@ public class CustomerFormController {
     }
 
     private void loadCustomerTable() {
-        tblCustomer.getItems().clear();
+        tblCustomers.getItems().clear();
         try {
             /*Get all customers*/
             ArrayList<CustomerDTO> allCustomers = customerBO.getAllCustomers();
@@ -120,7 +121,7 @@ public class CustomerFormController {
 
         Customer customer = new Customer(id, name, tel,address);
 
-       if (isValid()) {
+       //if (isValid()) {
             try {
                 boolean isSaved = CustomerDAO .save(customer);
                 if (isSaved) {
@@ -132,7 +133,7 @@ public class CustomerFormController {
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
-        }
+        //}
     }
 
     @FXML
@@ -151,7 +152,7 @@ public class CustomerFormController {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = CustomerRepo.delete(id);
+            boolean isDeleted = CustomerDAO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "customer deleted!").show();
             }
@@ -171,7 +172,7 @@ public class CustomerFormController {
         Customer customer = new Customer(id, name, tel,address);
 
         try {
-            boolean isUpdated = CustomerRepo.update(customer);
+            boolean isUpdated = CustomerBO.update(customer);
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "customer updated!").show();
             }
@@ -185,7 +186,7 @@ public class CustomerFormController {
         String id = txtId.getText();
 
         try {
-            Customer customer = CustomerRepo.searchById(id);
+            Customer customer = customerBO.searchById(id);
 
             if (customer != null) {
                 txtId.setText(customer.getId());

@@ -15,6 +15,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.example.dao.custom.EmployeeDAO;
+import org.example.dao.custom.MachineDAO;
+import org.example.entity.Employee;
+import org.example.entity.Machine;
+import org.example.view.tdm.EmployeeTM;
 /*import lk.ijse.citroessentional.Util.Regex;
 import lk.ijse.citroessentional.model.Employee;
 import lk.ijse.citroessentional.model.Machine;
@@ -73,7 +78,7 @@ public class EmployeeFormController {
     }
 
     private void setComboBoxValue() throws SQLException {
-        List<Machine> all = MachineRepo.getAll();
+        List<Machine> all = MachineDAO.getAll();
 
             ObservableList obList = FXCollections.observableArrayList();
         for (Machine machine :all) {
@@ -110,7 +115,7 @@ public class EmployeeFormController {
     private List<Employee> getAllemployee() {
         List<Employee> employeeList = null;
         try {
-            employeeList = EmployeeRepo.getAll();
+            employeeList = EmployeeDAO.getAll();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -127,9 +132,9 @@ public class EmployeeFormController {
 
         Employee employee = new Employee(id, name, address, tel,mashId);
 
-        if (isValid()) {
+       // if (isValid()) {
             try {
-                boolean isSaved = EmployeeRepo.save(employee);
+                boolean isSaved = EmployeeDAO.save(employee);
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "employee saved!").show();
                    // loadEmployeeTable();
@@ -137,7 +142,7 @@ public class EmployeeFormController {
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
-        }
+       // }
     }
 
     @FXML
@@ -156,7 +161,7 @@ public class EmployeeFormController {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = EmployeeRepo.delete(id);
+            boolean isDeleted = EmployeeDAO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "employee deleted!").show();
             }
@@ -176,7 +181,7 @@ public class EmployeeFormController {
         Employee employee = new Employee(id, name, address, tel,mashId);
 
         try {
-            boolean isUpdated = EmployeeRepo.update(employee);
+            boolean isUpdated = EmployeeDAO.update(employee);
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "employee updated!").show();
             }
@@ -190,7 +195,7 @@ public class EmployeeFormController {
         String id = txtId.getText();
 
         try {
-            Employee employee = EmployeeRepo.searchById(id);
+            Employee employee = EmployeeDAO.searchById(id);
 
             if (employee != null) {
                 txtId.setText(employee.getId());
