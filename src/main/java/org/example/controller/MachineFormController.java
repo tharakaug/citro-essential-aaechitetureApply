@@ -45,8 +45,8 @@ public class MachineFormController {
     @FXML
     private AnchorPane root;
 
-    @FXML
-    private TableView<MachineTm> tblMachine;
+    //@FXML
+    //private TableView<MachineTm> tblMachine;
 
     @FXML
     private JFXTextField txtDescription;
@@ -63,7 +63,7 @@ public class MachineFormController {
 
     private List<Machine> machineList = new ArrayList<>();
 
-    public void initialize() throws SQLException {
+  /*  public void initialize() throws SQLException {
         this.machineList = getAllMachine();
         setCellValueFactory();
         loadMachineTable();
@@ -133,7 +133,7 @@ public class MachineFormController {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
         }
-    }
+    }*/
 
 
     @FXML
@@ -147,7 +147,7 @@ public class MachineFormController {
 
     }
 
-    @FXML
+  /*  @FXML
     void btnDeleteOnAction(ActionEvent event) {
         String id = txtId.getText();
 
@@ -218,6 +218,6 @@ public class MachineFormController {
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.DESCRIPTION,txtDescription)) return false;
 
         return true;
-    }
+    }*/
 
 }

@@ -7,6 +7,7 @@ import org.example.entity.Customer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerDAOImpl implements CustomerDAO {
 
@@ -44,14 +45,14 @@ public class CustomerDAOImpl implements CustomerDAO {
         return SQLUtil.execute("DELETE FROM customer WHERE customer_cusID = ?",id);
     }
 
-   /* public static List<String> getId() throws SQLException, ClassNotFoundException {
-        ArrayList<Customer> allCustomers = new ArrayList<>();
+    public static List<String> getId() throws SQLException, ClassNotFoundException {
+        List<String> idList = new ArrayList<>();
         ResultSet rst = SQLUtil.execute("SELECT customer_cusID  FROM customer");
 
         while (rst.next()) {
             idList.add(rst.getString("customer_cusID"));
         }
         return idList;
-    }*/
+    }
 
 }

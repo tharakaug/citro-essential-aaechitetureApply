@@ -31,10 +31,10 @@ public class RegisterFormController {
         String name = txtName.getText();
         String pw = txtPassword.getText();
 
-        saveUser(user_id, name, pw);
+     //   saveUser(user_id, name, pw);
     }
 
-    private void saveUser(String user_id, String name, String pw) {
+  /*  private void saveUser(String user_id, String name, String pw) {
         if (isValid()) {
         try {
             String sql = "INSERT INTO user VALUES(?, ?, ?)";
@@ -55,7 +55,7 @@ public class RegisterFormController {
         }
     }
 
-    public void txtRegisterNameOnKeyReleased(KeyEvent keyEvent) {
+   /* public void txtRegisterNameOnKeyReleased(KeyEvent keyEvent) {
         Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.NAME,txtName);
     }
 
@@ -72,7 +72,7 @@ public class RegisterFormController {
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.PASSWORD,txtPassword)) return false;
 
         return true;
-    }
+    }*/
 
 }
 

@@ -7,6 +7,6 @@ import org.example.entity.Order;
 import java.sql.SQLException;
 
 public interface OrderDAO extends CrudDAO<Order> {
-    boolean update(Order entity) throws SQLException,ClassNotFoundException;
+
 
 }

@@ -9,14 +9,6 @@ import java.util.ArrayList;
 
 public interface EmployeeDAO extends CrudDAO<Employee> {
 
-    ArrayList<Employee> getAll() throws SQLException,ClassNotFoundException;
 
-    boolean save(Employee entity) throws SQLException,ClassNotFoundException;
-
-    boolean update(Employee entity) throws SQLException,ClassNotFoundException;
-
-    Employee searchById(String id) throws SQLException,ClassNotFoundException;
-
-    boolean delete(String id) throws SQLException,ClassNotFoundException;
 
 }

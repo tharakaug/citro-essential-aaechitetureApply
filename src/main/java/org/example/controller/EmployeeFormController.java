@@ -15,6 +15,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.example.bo.BOFactory;
+import org.example.bo.custom.CustomerBO;
+import org.example.bo.custom.EmployeeBO;
 import org.example.dao.custom.EmployeeDAO;
 import org.example.dao.custom.MachineDAO;
 import org.example.entity.Employee;
@@ -49,8 +52,8 @@ public class EmployeeFormController {
     @FXML
     private AnchorPane root;
 
-    @FXML
-    private TableView<EmployeeTm> tblEmployee;
+  //  @FXML
+  //  private TableView<EmployeeTm> tblEmployee;
 
     @FXML
     private JFXTextField txtAddress;
@@ -68,9 +71,10 @@ public class EmployeeFormController {
     private JFXComboBox<String> cmbMachineID;
 
 
-    private List<Employee> employeeList = new ArrayList<>();
+    //private List<Employee> employeeList = new ArrayList<>();
+    EmployeeBO employeeBO  = (EmployeeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.EMPLOYEE);
 
-    public void initialize() throws SQLException {
+  /*  public void initialize() throws SQLException {
         this.employeeList = getAllemployee();
         setCellValueFactory();
         loadEmployeeTable();
@@ -143,7 +147,7 @@ public class EmployeeFormController {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
        // }
-    }
+    }*/
 
     @FXML
     void btnBackOnAction(ActionEvent event) throws IOException {
@@ -156,7 +160,7 @@ public class EmployeeFormController {
 
     }
 
-    @FXML
+   /* @FXML
     void btnDeleteOnAction(ActionEvent event) {
         String id = txtId.getText();
 
@@ -233,7 +237,7 @@ public class EmployeeFormController {
         return true;
     }*/
 
-    public void cmbMachineIDOnAction(ActionEvent actionEvent) {
+  /*  public void cmbMachineIDOnAction(ActionEvent actionEvent) {
 
-    }
+    }*/
 }

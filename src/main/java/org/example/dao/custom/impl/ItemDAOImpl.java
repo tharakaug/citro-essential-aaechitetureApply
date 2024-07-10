@@ -14,18 +14,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemDAOImpl implements ItemDAO {
+    @Override
     public boolean save(Item entity)throws SQLException,ClassNotFoundException {
         return SQLUtil.execute("INSERT INTO product VALUES(?, ?, ?, ?)",entity.getId(),entity.getName(),entity.getPrice(),entity.getPrice());
     }
 
+    @Override
     public boolean delete(String id) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("DELETE FROM product WHERE product_proID = ?",id);
     }
 
+    @Override
     public boolean update(Item entity) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("UPDATE product SET product_proname  = ?, product_price = ?, product_proQTY = ? WHERE product_proID = ?",entity.getName(),entity.getPrice(),entity.getQty(),entity.getId());
     }
 
+    @Override
     public  Item searchById(String pro_id) throws SQLException,ClassNotFoundException{
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM product WHERE product_proID = ?",pro_id+"");
         resultSet.next();
@@ -33,6 +37,7 @@ public class ItemDAOImpl implements ItemDAO {
             return new Item(pro_id+"", resultSet.getString("name"),resultSet.getDouble("price"),resultSet.getInt("qty"));
     }
 
+    @Override
     public ArrayList<Item> getAll() throws SQLException, ClassNotFoundException {
         ArrayList<Item> allItem = new ArrayList<>();
 
@@ -44,6 +49,7 @@ public class ItemDAOImpl implements ItemDAO {
         return allItem;
     }
 
+
     public static List<String> getId() throws SQLException,ClassNotFoundException {
         ResultSet resultSet = SQLUtil.execute("SELECT product_proID FROM product");
 
@@ -54,6 +60,7 @@ public class ItemDAOImpl implements ItemDAO {
         }
         return idList;
     }
+
     public static boolean updateQty(List<OrderDetail> odList) throws SQLException, ClassNotFoundException {
         for (OrderDetail od : odList) {
             if(!updateQty(od)) {
@@ -62,6 +69,7 @@ public class ItemDAOImpl implements ItemDAO {
         }
         return true;
     }
+
 
     private static boolean updateQty(OrderDetail entity) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("UPDATE product SET product_proQTY  = product_proQTY  - ? WHERE product_proID  = ?", entity.getQty(), entity.getId());

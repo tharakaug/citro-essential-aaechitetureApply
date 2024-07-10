@@ -44,8 +44,8 @@ public class ItemFormController {
     @FXML
     private AnchorPane root;
 
-    @FXML
-    private TableView<ItemTm> tblItem;
+   // @FXML
+   // private TableView<ItemTm> tblItem;
 
     @FXML
     private JFXTextField txtId;
@@ -61,7 +61,7 @@ public class ItemFormController {
 
     private List<Item> itemList = new ArrayList<>();
 
-    public void initialize() {
+   /* public void initialize() {
         this.itemList = getAllItem();
         setCellValueFactory();
         loadItemTable();
@@ -196,7 +196,7 @@ public class ItemFormController {
         stage.centerOnScreen();
     }
 
-    public void btnDeleteOnAction(ActionEvent actionEvent) {
+  /*  public void btnDeleteOnAction(ActionEvent actionEvent) {
         String id = txtId.getText();
 
         try {
@@ -207,7 +207,7 @@ public class ItemFormController {
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
-    }
+    }*/
 }
 
 

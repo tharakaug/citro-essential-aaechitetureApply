@@ -9,13 +9,5 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface ItemDAO extends CrudDAO<Item> {
-    ArrayList<Item> getAll() throws SQLException,ClassNotFoundException;
 
-    boolean save(Item entity) throws SQLException,ClassNotFoundException;
-
-    boolean update(Item entity) throws SQLException,ClassNotFoundException;
-
-    Item searchById(String id) throws SQLException,ClassNotFoundException;
-
-    boolean delete(String id) throws SQLException,ClassNotFoundException;
 }

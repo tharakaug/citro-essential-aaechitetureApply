@@ -40,8 +40,8 @@ public class SupplierFormController {
     @FXML
     private AnchorPane root;
 
-    @FXML
-    private TableView<SupplierTm> tblSupplier;
+  //  @FXML
+  //  private TableView<SupplierTm> tblSupplier;
 
     @FXML
     private JFXTextField txtContact;
@@ -54,7 +54,7 @@ public class SupplierFormController {
 
     private List<Supplier> supplierList = new ArrayList<>();
 
-    public void initialize() {
+  /*  public void initialize() {
         this.supplierList = getAllSupplier();
         setCellValueFactory();
         loadSupplierTable();
@@ -111,7 +111,7 @@ public class SupplierFormController {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
       //  }
-    }
+    }*/
 
     @FXML
     void btnBackOnAction(ActionEvent event)throws IOException {
@@ -124,7 +124,7 @@ public class SupplierFormController {
 
     }
 
-    @FXML
+  /*  @FXML
     void btnDeleteOnAction(ActionEvent event) {
         String id = txtId.getText();
 

@@ -68,12 +68,12 @@ public class CustomerFormController {
     @FXML
     private JFXTextField txtName;
 
-    private List<Customer> customerList = new ArrayList<>();
+   // private List<Customer> customerList = new ArrayList<>();
 
     CustomerBO customerBO  = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
 
     public void initialize() {
-        this.customerList = getAllCustomers();
+       // this.customerList = getAllCustomers();
         setCellValueFactory();
         loadCustomerTable();
     }
@@ -89,7 +89,7 @@ public class CustomerFormController {
         tblCustomers.getItems().clear();
         try {
             /*Get all customers*/
-            ArrayList<CustomerDTO> allCustomers = customerBO.getAllCustomers();
+            ArrayList<CustomerDTO> allCustomers = customerBO.getAll();
 
             for (CustomerDTO c : allCustomers) {
                 tblCustomers.getItems().add(new CustomerTM(c.getId(), c.getName(),c.getTel(), c.getAddress()));
@@ -101,17 +101,19 @@ public class CustomerFormController {
         }
     }
 
-    private List<Customer> getAllCustomers() {
-        List<Customer> customerList = null;
+   /* private ArrayList<CustomerDTO> getAllCustomers() {
+        ArrayList<CustomerDTO> customerList = null;
         try {
-            customerList = CustomerDAO.getAll();
+            customerList = CustomerBO.getAll();
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
         return customerList;
-    }
+    }*/
 
-    @FXML
+  /*  @FXML
     void btnAddOnAction(ActionEvent event) {
         String id = txtId.getText();
         String name = txtName.getText();
@@ -119,22 +121,24 @@ public class CustomerFormController {
         String address = txtAddress.getText();
 
 
-        Customer customer = new Customer(id, name, tel,address);
+        CustomerDTO customer = new CustomerDTO(id, name, tel,address);
 
        //if (isValid()) {
             try {
-                boolean isSaved = CustomerDAO .save(customer);
+                boolean isSaved = CustomerBO.save(customer);
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "customer saved!").show();
                     initialize();
                 }
-                customerBO.addCustomer(new CustomerDTO(id,name,tel,address));
+                customerBO.save(new CustomerDTO(id,name,tel,address));
                 tblCustomers.getItems().add(new CustomerTM(id, name,tel, address));
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         //}
-    }
+    }*/
 
     @FXML
     void btnBackOnAction(ActionEvent event)throws IOException {
@@ -147,12 +151,12 @@ public class CustomerFormController {
 
     }
 
-    @FXML
-    void btnDeleteOnAction(ActionEvent event) {
+   /* @FXML
+    void btnDeleteOnAction(ActionEvent event) throws SQLException,ClassNotFoundException {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = CustomerDAO.delete(id);
+            boolean isDeleted = CustomerBO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "customer deleted!").show();
             }
@@ -169,15 +173,18 @@ public class CustomerFormController {
         String address = txtAddress.getText();
 
 
-        Customer customer = new Customer(id, name, tel,address);
+        CustomerDTO dto = new CustomerDTO(id, name, tel,address);
 
         try {
-            boolean isUpdated = CustomerBO.update(customer);
+
+            boolean isUpdated = CustomerBO.update(dto);
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "customer updated!").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -198,6 +205,8 @@ public class CustomerFormController {
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -1,5 +1,10 @@
 package org.example.view.tdm;
 
+import lombok.Data;
+import lombok.Getter;
+
+@Getter
+@Data
 public class EmployeeTM implements Comparable<EmployeeTM>{
 
     private String id;
@@ -16,40 +21,21 @@ public class EmployeeTM implements Comparable<EmployeeTM>{
         this.tel = tel;
         this.mashId = mashId;
     }
-    public String getId() {
-        return id;
-    }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getName(){
-        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getAddress(){
-        return address;
-    }
-
     public void setAddress(String address) {
         this.address = address;
     }
 
-    public String getTel(){
-        return tel;
-    }
-
     public void setTel(String tel) {
         this.tel = tel;
-    }
-
-    public String getMashId(){
-        return mashId;
     }
 
     @Override

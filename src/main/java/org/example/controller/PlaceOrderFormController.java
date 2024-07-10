@@ -79,8 +79,8 @@ public class PlaceOrderFormController {
     @FXML
     private AnchorPane root;
 
-    @FXML
-    private TableView<CartTm> tblOrder;
+  //  @FXML
+  //  private TableView<CartTm> tblOrder;
 
     @FXML
     private JFXTextField txtDate;
@@ -91,7 +91,7 @@ public class PlaceOrderFormController {
     @FXML
     private JFXTextField txtQty;
 
-    private ObservableList<CartTm> cartList = FXCollections.observableArrayList();
+   /* private ObservableList<CartTm> cartList = FXCollections.observableArrayList();
     private double netTotal = 0;
 
     public void initialize() {
@@ -142,7 +142,7 @@ public class PlaceOrderFormController {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
     /*private void loadNextOrderId() {
         try {
@@ -167,7 +167,7 @@ public class PlaceOrderFormController {
     }*/
 
 
-    @FXML
+  /*  @FXML
     void btnAddtocartOnAction(ActionEvent event) {
         String orderId = txtId.getText();
         String orderDate = txtDate.getText();
@@ -210,7 +210,7 @@ public class PlaceOrderFormController {
             netTotal += (double) colTotal.getCellData(i);
         }
         lblNetTotal.setText(String.valueOf(netTotal));
-    }
+    }*/
 
 
     @FXML
@@ -223,7 +223,7 @@ public class PlaceOrderFormController {
         stage.centerOnScreen();
     }
 
-    @FXML
+  /*  @FXML
     void btnDeleteOnAction(ActionEvent event) {
 
     }

@@ -1,6 +1,6 @@
 package org.example.bo;
 
-import org.example.bo.custom.Impl.CustomerBOImpl;
+import org.example.bo.custom.Impl.*;
 
 public class BOFactory {
 
@@ -12,7 +12,7 @@ public class BOFactory {
     }
 
     public enum BOTypes{
-        CUSTOMER
+        CUSTOMER,EMPLOYEE,ITEM,MACHINE,MATERIAL,ORDER,SUPPLIER
     }
 
     //Object creation logic for BO objects
@@ -20,8 +20,18 @@ public class BOFactory {
         switch (types){
             case CUSTOMER:
                 return new CustomerBOImpl();
-           // case ITEM:
-               // return new ItemBOImpl();
+            case EMPLOYEE:
+                return new EmployeeBOImpl();
+            case ITEM:
+                return new ItemBOImpl();
+            case MACHINE:
+                return new MachineBOImpl();
+            case MATERIAL:
+                return new MaterialBOImpl();
+            case ORDER:
+                return new OrderBOImpl();
+            case SUPPLIER:
+                return new SupplierBOImpl();
             default:
                 return null;
         }

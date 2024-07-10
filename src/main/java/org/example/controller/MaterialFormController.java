@@ -42,8 +42,8 @@ public class MaterialFormController {
     @FXML
     private AnchorPane root;
 
-    @FXML
-    private TableView<MaterialTm> tblMaterial;
+  //  @FXML
+    //private TableView<MaterialTm> tblMaterial;
 
     @FXML
     private JFXTextField txtDescription;
@@ -59,7 +59,7 @@ public class MaterialFormController {
 
     private List<Material> materialList = new ArrayList<>();
 
-    public void initialize() {
+  /*  public void initialize() {
         this.materialList = getAllmaterial();
         setCellValueFactory();
         loadMaterialTable();
@@ -119,7 +119,7 @@ public class MaterialFormController {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
         }
-    }
+    }*/
 
     @FXML
     void btnBackOnAction(ActionEvent event)throws IOException {
@@ -132,7 +132,7 @@ public class MaterialFormController {
 
     }
 
-    @FXML
+   /* @FXML
     void btnDeleteOnAction(ActionEvent event) {
         String id = txtId.getText();
 
@@ -205,6 +205,6 @@ public class MaterialFormController {
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.QTY,txtQty)) return false;
 
         return true;
-    }
+    }*/
 
 }
