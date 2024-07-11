@@ -14,7 +14,7 @@ public interface MaterialBO extends SuperBO {
 
     boolean update(MaterialDTO dto) throws SQLException,ClassNotFoundException;
 
-    MaterialDTO searchById(String id) throws SQLException,ClassNotFoundException;
+    Material searchById(String id) throws SQLException,ClassNotFoundException;
 
     boolean delete(String id) throws SQLException,ClassNotFoundException;
 }

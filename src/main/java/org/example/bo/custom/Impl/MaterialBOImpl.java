@@ -5,6 +5,7 @@ import org.example.dao.DAOFactory;
 import org.example.dao.SQLUtil;
 import org.example.dao.custom.MaterialDAO;
 import org.example.dto.MaterialDTO;
+import org.example.entity.Machine;
 import org.example.entity.Material;
 
 import java.sql.ResultSet;
@@ -20,40 +21,36 @@ public class MaterialBOImpl implements MaterialBO {
     }
     @Override
     public boolean delete(String id) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("DELETE FROM material WHERE material_MID = ?",id);
+        return materialDAO.delete(id);
     }
     @Override
-    public boolean update(MaterialDTO entity) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("UPDATE material SET  material_matDesc  = ?, material_matQTY  = ?, material_unitprice  = ? WHERE material_MID = ?",entity.getName(),entity.getQty(),entity.getPrice(),entity.getId()) ;
+    public boolean update(MaterialDTO dto) throws SQLException, ClassNotFoundException {
+        return materialDAO.update(new Material(dto.getName(),dto.getQty(),dto.getPrice(),dto.getId())) ;
     }
     @Override
-    public  Material searchById(String id) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = SQLUtil.execute("SELECT * FROM material WHERE material_MID = ?",id+"") ;
-        resultSet.next();
-
-        return new Material(id+"", resultSet.getString("name"),resultSet.getString("qty"),resultSet.getString("price"));
+    public Material searchById(String id) throws SQLException, ClassNotFoundException {
+        return materialDAO.searchById(id);
     }
     @Override
-    public ArrayList<Material> getAll() throws SQLException, ClassNotFoundException {
-        ArrayList<Material> allMaterial = new ArrayList<>();
+    public ArrayList<MaterialDTO> getAll() throws SQLException, ClassNotFoundException {
+        ArrayList<MaterialDTO> allMaterial = new ArrayList<>();
+        ArrayList<Material> all = materialDAO.getAll();
 
-        ResultSet resultSet = SQLUtil.execute("SELECT * FROM material");
-
-        while (resultSet.next()) {
-            Material material = new Material(resultSet.getString("id"),resultSet.getString("name"),resultSet.getString("qty"),resultSet.getString("price"));
-            allMaterial.add(material);
+        for (Material c : all) {
+            allMaterial.add(new MaterialDTO(c.getId(), c.getName(), c.getQty(), c.getPrice()));
         }
         return allMaterial;
-    }
 
-    public static List<String> getId() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet =SQLUtil.execute("SELECT material_MID FROM material") ;
 
-        List<String> idList = new ArrayList<>();
+      /*  public static List<String> getId () throws SQLException, ClassNotFoundException {
+            ResultSet resultSet = SQLUtil.execute("SELECT material_MID FROM material");
 
-        while (resultSet.next()) {
-            idList.add(resultSet.getString(1));
-        }
-        return idList;
+            List<String> idList = new ArrayList<>();
+
+            while (resultSet.next()) {
+                idList.add(resultSet.getString(1));
+            }
+            return idList;
+        }*/
     }
 }

@@ -17,7 +17,8 @@ public class CustomerDAOImpl implements CustomerDAO {
         ResultSet rst = SQLUtil.execute("SELECT * FROM customer") ;
 
         while (rst.next()) {
-            Customer customer = new Customer(rst.getString("id"), rst.getString("name") , rst.getString("address") ,rst.getString("tel") );
+            Customer customer = new Customer(rst.getString("customer_cusID"), rst.getString("customer_name") , rst.getString("customer_cusContactNO") ,rst.getString("customer_address") );
+            System.out.println(customer);
             allCustomers.add(customer);
         }
         return allCustomers;
