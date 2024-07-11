@@ -15,6 +15,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.example.bo.BOFactory;
+import org.example.bo.custom.CustomerBO;
+import org.example.bo.custom.MachineBO;
+import org.example.dto.CustomerDTO;
+import org.example.dto.MachineDTO;
+import org.example.entity.Item;
 import org.example.entity.Machine;
 
 /*import lk.ijse.citroessentional.Util.Regex;
@@ -25,6 +31,7 @@ import lk.ijse.citroessentional.repository.ItemRepo;
 import lk.ijse.citroessentional.repository.MachineRepo;*/
 import org.example.dao.custom.ItemDAO;
 import org.example.dao.custom.MachineDAO;
+import org.example.view.tdm.MachineTM;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -45,8 +52,8 @@ public class MachineFormController {
     @FXML
     private AnchorPane root;
 
-    //@FXML
-    //private TableView<MachineTm> tblMachine;
+    @FXML
+    private TableView<MachineTM> tblMachine;
 
     @FXML
     private JFXTextField txtDescription;
@@ -61,16 +68,18 @@ public class MachineFormController {
     private ComboBox<String> cmbProID;
 
 
-    private List<Machine> machineList = new ArrayList<>();
+    //private List<Machine> machineList = new ArrayList<>();
+    MachineBO machineBO = (MachineBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.MACHINE);
 
-  /*  public void initialize() throws SQLException {
-        this.machineList = getAllMachine();
+
+    public void initialize() throws SQLException {
+        //this.machineList = getAllMachine();
         setCellValueFactory();
         loadMachineTable();
-        setComboBoxValue();
+        //setComboBoxValue();
     }
 
-    private void setComboBoxValue() throws SQLException {
+    /*private void setComboBoxValue() throws SQLException {
         List<Item> all = ItemDAO.getAll();
 
         ObservableList obList = FXCollections.observableArrayList();
@@ -78,7 +87,7 @@ public class MachineFormController {
             obList.add(item.getId());
         }
         cmbProID.setItems(obList);
-    }
+    }*/
 
     private void setCellValueFactory() {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -87,23 +96,23 @@ public class MachineFormController {
     }
 
     private void loadMachineTable() {
-        ObservableList<MachineTm> tmList = FXCollections.observableArrayList();
 
-        for (Machine machine : machineList) {
-            MachineTm machineTm = new MachineTm(
-                    machine.getId(),
-                    machine.getName(),
-                    machine.getDesc()
-            );
+        tblMachine.getItems().clear();
 
-            tmList.add(machineTm);
+        try{
+            ArrayList<MachineDTO>  allMachine = machineBO.getAll();
+
+        for (MachineDTO C : allMachine) {
+            tblMachine.getItems().add(new MachineTM(C.getId(), C.getName(), C.getDesc(),C.getProId()));
         }
-        tblMachine.setItems(tmList);
-        MachineTm selectedItem = (MachineTm) tblMachine.getSelectionModel().getSelectedItem();
-        System.out.println("selectedItem = " + selectedItem);
+        }catch (SQLException e) {
+                new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+            } catch (ClassNotFoundException e) {
+                new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+            }
     }
 
-    private List<Machine> getAllMachine() {
+    /*private List<Machine> getAllMachine() {
         List<Machine> machineList = null;
         try {
             machineList = MachineDAO.getAll();
@@ -111,9 +120,9 @@ public class MachineFormController {
             throw new RuntimeException(e);
         }
         return machineList;
-    }
+    }*/
 
-    @FXML
+@FXML
     void btnAddOnAction(ActionEvent event) {
         String id = txtId.getText();
         String name = txtName.getText();
@@ -121,19 +130,21 @@ public class MachineFormController {
         String proId = cmbProID.getValue();
 
 
-        Machine machine = new Machine(id, name, desc, proId);
+       // Machine machine = new Machine(id, name, desc, proId);
 
-        if (isValid()) {
+       // if (isValid()) {
             try {
-                boolean isSaved = MachineDAO.save(machine);
+                boolean isSaved = machineBO.save(new MachineDTO(id,name,desc,proId));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "machine saved!").show();
                 }
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+            }catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
-    }*/
+
 
 
     @FXML
@@ -147,17 +158,19 @@ public class MachineFormController {
 
     }
 
-  /*  @FXML
+    @FXML
     void btnDeleteOnAction(ActionEvent event) {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = MachineDAO.delete(id);
+            boolean isDeleted = machineBO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "machine deleted!").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -170,15 +183,17 @@ public class MachineFormController {
         String proId = cmbProID.getValue();
 
 
-        Machine machine = new Machine(id, name, desc,proId);
+        //Machine machine = new Machine(id, name, desc,proId);
 
         try {
-            boolean isUpdated = MachineDAO.update(machine);
+            boolean isUpdated = machineBO.update(new MachineDTO(id,name,desc,proId));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "machine updated!").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
     }
@@ -188,7 +203,7 @@ public class MachineFormController {
         String id = txtId.getText();
 
         try {
-            Machine machine = MachineDAO.searchById(id);
+            Machine machine = machineBO.searchById(id);
 
             if (machine != null) {
                 txtId.setText(machine.getId());
@@ -197,22 +212,24 @@ public class MachineFormController {
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public void txtIMachineIDOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtId);
+        //Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtId);
     }
 
 
     public void txtIMachineNameOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.NAME,txtName);
+      //  Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.NAME,txtName);
     }
 
     public void txtIMachineDescOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.DESCRIPTION,txtDescription);
+       // Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.DESCRIPTION,txtDescription);
     }
-    public boolean isValid(){
+   /* public boolean isValid(){
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtId)) return false;
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.NAME,txtName)) return false;
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.DESCRIPTION,txtDescription)) return false;

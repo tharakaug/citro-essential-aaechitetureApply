@@ -59,7 +59,7 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <TableView fx:id="tblCustomer" layoutX="218.0" layoutY="323.0" opacity="0.79" prefHeight="276.0" prefWidth="535.0">
+      <TableView fx:id="tblCustomers" layoutX="218.0" layoutY="323.0" opacity="0.79" prefHeight="276.0" prefWidth="535.0">
          <columns>
             <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
             <TableColumn fx:id="colName" prefWidth="142.0" text="Name" />

@@ -14,7 +14,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.example.bo.BOFactory;
+import org.example.bo.custom.CustomerBO;
+import org.example.bo.custom.MaterialBO;
+import org.example.dto.CustomerDTO;
+import org.example.dto.MaterialDTO;
 import org.example.entity.Material;
+import org.example.view.tdm.MaterialTM;
 /*import lk.ijse.citroessentional.Util.Regex;
 import lk.ijse.citroessentional.model.Material;
 import lk.ijse.citroessentional.model.tm.MaterialTm;
@@ -42,8 +48,8 @@ public class MaterialFormController {
     @FXML
     private AnchorPane root;
 
-  //  @FXML
-    //private TableView<MaterialTm> tblMaterial;
+    @FXML
+    private TableView<MaterialTM> tblMaterial;
 
     @FXML
     private JFXTextField txtDescription;
@@ -57,10 +63,12 @@ public class MaterialFormController {
     @FXML
     private JFXTextField txtQty;
 
-    private List<Material> materialList = new ArrayList<>();
+  //  private List<Material> materialList = new ArrayList<>();
 
-  /*  public void initialize() {
-        this.materialList = getAllmaterial();
+    MaterialBO materialBO = (MaterialBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.MATERIAL);
+
+    public void initialize() {
+       // this.materialList = getAllmaterial();
         setCellValueFactory();
         loadMaterialTable();
     }
@@ -73,24 +81,24 @@ public class MaterialFormController {
     }
 
     private void loadMaterialTable() {
-        ObservableList<MaterialTm> tmList = FXCollections.observableArrayList();
 
-        for (Material material : materialList) {
-            MaterialTm materialTm = new MaterialTm(
-                    material.getId(),
-                    material.getName(),
-                    material.getQty(),
-                    material.getPrice()
-            );
+        tblMaterial.getItems().clear();
 
-            tmList.add(materialTm);
+        try {
+            ArrayList<MaterialDTO> allMaterial = materialBO.getAll();
+
+            for (MaterialDTO c: allMaterial) {
+                tblMaterial.getItems().add(new MaterialTM(c.getId(),c.getName(),c.getQty(),c.getPrice()));
+            }
+            }catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
-        tblMaterial.setItems(tmList);
-        MaterialTm selectedItem = (MaterialTm) tblMaterial.getSelectionModel().getSelectedItem();
-        System.out.println("selectedItem = " + selectedItem);
+
     }
 
-    private List<Material> getAllmaterial() {
+   /* private List<Material> getAllmaterial() {
         List<Material> materialList = null;
         try {
             materialList = MaterialRepo.getAll();
@@ -98,7 +106,7 @@ public class MaterialFormController {
             throw new RuntimeException(e);
         }
         return materialList;
-    }
+    }*/
 
     @FXML
     void btnAddOnAction(ActionEvent event) {
@@ -107,19 +115,22 @@ public class MaterialFormController {
         String qty = txtQty.getText();
         String price = txtPrice.getText();
 
-        Material material = new Material(id, name, qty, price);
+       // Material material = new Material(id, name, qty, price);
 
-        if (isValid()) {
+        //if (isValid()) {
             try {
-                boolean isSaved = MaterialRepo.save(material);
+                boolean isSaved = materialBO.save(new MaterialDTO(id,name,qty,price));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "material saved!").show();
+                    initialize();
                 }
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+            }catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
-    }*/
+
 
     @FXML
     void btnBackOnAction(ActionEvent event)throws IOException {
@@ -132,17 +143,19 @@ public class MaterialFormController {
 
     }
 
-   /* @FXML
-    void btnDeleteOnAction(ActionEvent event) {
+    @FXML
+    void btnDeleteOnAction(ActionEvent event)throws SQLException,ClassNotFoundException {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = MaterialRepo.delete(id);
+            boolean isDeleted = materialBO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "material deleted!").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -153,15 +166,17 @@ public class MaterialFormController {
         String qty = txtQty.getText();
         String price = txtPrice.getText();
 
-        Material material = new Material(id, name, qty, price);
+       // Material material = new Material(id, name, qty, price);
 
         try {
-            boolean isUpdated = MaterialRepo.update(material);
+            boolean isUpdated = materialBO.update(new MaterialDTO(id,name,qty,price));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "material updated!").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -170,7 +185,7 @@ public class MaterialFormController {
         String id = txtId.getText();
 
         try {
-            Material material = MaterialRepo.searchById(id);
+            Material material = materialBO.searchById(id);
 
             if (material != null) {
                 txtId.setText(material.getId());
@@ -180,25 +195,27 @@ public class MaterialFormController {
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public void txtMaterialIDOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtId);
+      //  Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtId);
     }
 
     public void txtMaterialDescOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.DESCRIPTION,txtDescription);
+       // Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.DESCRIPTION,txtDescription);
     }
 
     public void txtMaterialUnitpriceOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.PRICE,txtPrice);
+      //  Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.PRICE,txtPrice);
     }
 
     public void txtMaterialQtyOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.QTY,txtQty);
+       // Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.QTY,txtQty);
     }
-    public boolean isValid(){
+   /* public boolean isValid(){
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtId)) return false;
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.DESCRIPTION,txtDescription)) return false;
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.PRICE,txtPrice)) return false;

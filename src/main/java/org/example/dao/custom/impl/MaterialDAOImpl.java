@@ -30,7 +30,7 @@ public class MaterialDAOImpl implements MaterialDAO {
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM material WHERE material_MID = ?",id+"") ;
         resultSet.next();
 
-           return new Material(id+"", resultSet.getString("name"),resultSet.getString("qty"),resultSet.getString("price"));
+           return new Material(id+"", resultSet.getString("material_matDesc"),resultSet.getString("material_matQTY"),resultSet.getString("material_unitprice"));
     }
 
     public  ArrayList<Material> getAll() throws SQLException, ClassNotFoundException {
@@ -39,7 +39,7 @@ public class MaterialDAOImpl implements MaterialDAO {
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM material");
 
         while (resultSet.next()) {
-            Material material = new Material(resultSet.getString("id"),resultSet.getString("name"),resultSet.getString("qty"),resultSet.getString("price"));
+            Material material = new Material(resultSet.getString("material_MID"),resultSet.getString("material_matDesc"),resultSet.getString("material_matQTY"),resultSet.getString("material_unitprice"));
             allMaterial.add(material);
         }
         return allMaterial;

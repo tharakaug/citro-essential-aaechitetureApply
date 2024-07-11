@@ -29,7 +29,7 @@ public class MachineDAOImpl implements MachineDAO {
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM machine WHERE machine_mashID = ?",id+"") ;
         resultSet.next();
 
-            return new Machine(id+"",resultSet.getString("name"), resultSet.getString("desc"),resultSet.getString("proId"));
+            return new Machine(id+"",resultSet.getString("machine_machineName"), resultSet.getString("machine_machineDecs"),resultSet.getString("product_proID"));
     }
 
     public  ArrayList<Machine> getAll() throws SQLException, ClassNotFoundException {
@@ -38,22 +38,20 @@ public class MachineDAOImpl implements MachineDAO {
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM machine") ;
         while (resultSet.next()) {
 
-            Machine machine = new Machine(resultSet.getString("id"), resultSet.getString("name"), resultSet.getString("desc"), resultSet.getString("proId"));
+            Machine machine = new Machine(resultSet.getString("machine_mashID"), resultSet.getString("machine_machineName"), resultSet.getString("machine_machineDecs"), resultSet.getString("product_proID"));
             allMachine.add(machine);
         }
         return allMachine;
     }
+    
 
-    public static List<String> getId() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = SQLUtil.execute("SELECT machine_mashID  FROM machine");
-
-        List<String> idList = new ArrayList<>();
-
-        while (resultSet.next()) {
-            idList.add(resultSet.getString(1));
+    @Override
+    public List<String> getIds() throws SQLException, ClassNotFoundException {
+           List <String> idList =new ArrayList<>();
+           ResultSet rst = SQLUtil.execute("SELECT machine_mashID FROM machine");
+           while (rst.next()){
+            idList.add(rst.getString(1));
         }
-        return idList;
-
-    }
-
-}
+            return idList;
+            }
+         }

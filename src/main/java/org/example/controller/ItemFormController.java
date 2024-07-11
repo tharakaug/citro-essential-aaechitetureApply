@@ -14,8 +14,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.example.bo.BOFactory;
+import org.example.bo.custom.CustomerBO;
+import org.example.bo.custom.ItemBO;
 import org.example.dao.custom.ItemDAO;
+import org.example.dto.CustomerDTO;
+import org.example.dto.ItemDTO;
 import org.example.entity.Item;
+import org.example.view.tdm.ItemTM;
 /*import lk.ijse.citroessentional.Util.Regex;
 import lk.ijse.citroessentional.Util.TextField;
 import lk.ijse.citroessentional.model.Item;
@@ -44,8 +50,8 @@ public class ItemFormController {
     @FXML
     private AnchorPane root;
 
-   // @FXML
-   // private TableView<ItemTm> tblItem;
+    @FXML
+    private TableView<ItemTM> tblItem;
 
     @FXML
     private JFXTextField txtId;
@@ -59,10 +65,12 @@ public class ItemFormController {
     @FXML
     private JFXTextField txtQty;
 
-    private List<Item> itemList = new ArrayList<>();
+    // private List<Item> itemList = new ArrayList<>();
+    ItemBO itemBO = (ItemBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ITEM);
 
-   /* public void initialize() {
-        this.itemList = getAllItem();
+
+    public void initialize() {
+        //this.itemList = getAllItem();
         setCellValueFactory();
         loadItemTable();
     }
@@ -75,24 +83,22 @@ public class ItemFormController {
     }
 
     private void loadItemTable() {
-        ObservableList<ItemTm> tmList = FXCollections.observableArrayList();
+        tblItem.getItems().clear();
+        try {
+            ArrayList<ItemDTO> allItem = itemBO.getAll();
 
-        for (Item item : itemList) {
-            ItemTm itemTm = new ItemTm(
-                    item.getId(),
-                    item.getName(),
-                    item.getPrice(),
-                    item.getQty()
-            );
-
-            tmList.add(itemTm);
+            for (ItemDTO C : allItem) {
+                tblItem.getItems().add(new ItemTM(C.getId(), C.getName(), C.getPrice(), C.getQty()));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
-        tblItem.setItems(tmList);
-        ItemTm selectedItem = (ItemTm) tblItem.getSelectionModel().getSelectedItem();
-        System.out.println("selectedItem = " + selectedItem);
+
     }
 
-    private List<Item> getAllItem() {
+  /*  private List<Item> getAllItem() {
         List<Item> itemList = null;
         try {
             itemList = ItemDAO.getAll();
@@ -100,7 +106,7 @@ public class ItemFormController {
             throw new RuntimeException(e);
         }
         return itemList;
-    }
+    }*/
 
     @FXML
     void btnAddOnAction(ActionEvent event) {
@@ -109,37 +115,42 @@ public class ItemFormController {
         double price = Double.parseDouble(txtPrice.getText());
         int qty = Integer.parseInt(txtQty.getText());
 
-        Item item = new Item(id, name, price, qty);
+       // Item item = new Item(id, name, price, qty);
 
-      //  if (isValid()) {
-            try {
-                boolean isSaved = ItemDAO.save(item);
-                if (isSaved) {
-                    new Alert(Alert.AlertType.CONFIRMATION, "item saved!").show();
-                }
-            } catch (SQLException e) {
-                new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        //  if (isValid()) {
+        try {
+            boolean isSaved = itemBO.save(new ItemDTO(id,name,price,qty));
+            if (isSaved) {
+                new Alert(Alert.AlertType.CONFIRMATION, "item saved!").show();
+                initialize();
             }
-      //  }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        //  }
 
     }
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event)throws SQLException,ClassNotFoundException {
         String id = txtId.getText();
         String name = txtName.getText();
         double price = Double.parseDouble(txtPrice.getText());
         int qty = Integer.parseInt(txtQty.getText());
 
-        Item item = new Item(id, name, price, qty);
+       // Item item = new Item(id, name, price, qty);
 
         try {
-            boolean isUpdated = ItemDAO.update(item);
+            boolean isUpdated = itemBO.update(new ItemDTO(id,name,price,qty));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "item updated!").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -148,7 +159,7 @@ public class ItemFormController {
         String id = txtId.getText();
 
         try {
-            Item item = ItemDAO.searchById(id);
+            Item item = itemBO.searchById(id);
 
             if (item != null) {
                 txtId.setText(item.getId());
@@ -158,27 +169,29 @@ public class ItemFormController {
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
-  /*  public void txtItemIDOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID, txtId);
+    public void txtItemIDOnKeyReleased(KeyEvent keyEvent) {
+      //  Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID, txtId);
     }
 
     public void txtItemNameOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.NAME, txtName);
+      //  Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.NAME, txtName);
     }
 
     public void txtItemPriceOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.PRICE, txtPrice);
+      //  Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.PRICE, txtPrice);
     }
 
     public void txtItemQtyOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(TextField.QTY, txtQty);
+      //  Regex.setTextColor(TextField.QTY, txtQty);
     }
 
 
-    public boolean isValid() {
+ /*   public boolean isValid() {
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID, txtId)) return false;
         if (!Regex.setTextColor(TextField.NAME, txtName)) return false;
         if (!Regex.setTextColor(TextField.PRICE, txtPrice)) return false;
@@ -187,7 +200,7 @@ public class ItemFormController {
         return true;
     }*/
 
-    public void btnBackOnAction(ActionEvent actionEvent) throws IOException {
+    public void btnBackOnAction (ActionEvent actionEvent) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/dashboard_form.fxml"));
         Stage stage = (Stage) root.getScene().getWindow();
 
@@ -196,18 +209,23 @@ public class ItemFormController {
         stage.centerOnScreen();
     }
 
-  /*  public void btnDeleteOnAction(ActionEvent actionEvent) {
+
+
+    public void btnDeleteOnAction(ActionEvent actionEvent) throws SQLException,ClassNotFoundException{
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = ItemDAO.delete(id);
+            boolean isDeleted = itemBO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "item deleted!").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
-    }*/
+    }
 }
+
 
 

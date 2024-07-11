@@ -31,11 +31,11 @@ public class RegisterFormController {
         String name = txtName.getText();
         String pw = txtPassword.getText();
 
-     //   saveUser(user_id, name, pw);
+        saveUser(user_id, name, pw);
     }
 
-  /*  private void saveUser(String user_id, String name, String pw) {
-        if (isValid()) {
+    private void saveUser(String user_id, String name, String pw) {
+      /*  if (isValid()) {
         try {
             String sql = "INSERT INTO user VALUES(?, ?, ?)";
 
@@ -52,21 +52,21 @@ public class RegisterFormController {
             } catch(SQLException e){
                 new Alert(Alert.AlertType.ERROR, "something happend!").show();
             }
-        }
+        }*/
     }
 
-   /* public void txtRegisterNameOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.NAME,txtName);
+    public void txtRegisterNameOnKeyReleased(KeyEvent keyEvent) {
+      //  Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.NAME,txtName);
     }
 
     public void txtRegisterIDOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtUserId);
+      //  Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtUserId);
     }
 
     public void txtRegisterPasswordOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.PASSWORD,txtPassword);
+      //  Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.PASSWORD,txtPassword);
     }
-    public boolean isValid(){
+    /*public boolean isValid(){
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.NAME,txtName)) return false;
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtUserId)) return false;
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.PASSWORD,txtPassword)) return false;

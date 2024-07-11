@@ -25,7 +25,7 @@ public class SupplierDAOImpl implements SupplierDAO {
         ResultSet resultSet=SQLUtil.execute("SELECT * FROM supplier WHERE supplier_supID = ?",id+"") ;
         resultSet.next();
 
-            return new Supplier(id+"",resultSet.getString("name"),resultSet.getString("tel"));
+            return new Supplier(id+"",resultSet.getString("supplier_supName"),resultSet.getString("supplier_contactNO"));
     }
 
     public boolean delete(String id) throws SQLException, ClassNotFoundException {
@@ -37,7 +37,7 @@ public class SupplierDAOImpl implements SupplierDAO {
 
         ResultSet resultSet=SQLUtil.execute("SELECT * FROM supplier") ;
         while (resultSet.next()) {
-            Supplier supplier = new Supplier(resultSet.getString("id"),resultSet.getString("name"),resultSet.getString("tel"));
+            Supplier supplier = new Supplier(resultSet.getString("supplier_supID"),resultSet.getString("supplier_supName"),resultSet.getString("supplier_contactNO"));
             allSupplier.add(supplier);
         }
         return allSupplier;

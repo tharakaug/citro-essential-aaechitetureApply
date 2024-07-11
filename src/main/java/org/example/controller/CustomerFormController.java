@@ -31,7 +31,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-;
+
 
 //import static jdk.internal.agent.Agent.getText;
 
@@ -73,7 +73,7 @@ public class CustomerFormController {
     CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
 
     public void initialize() {
-        // this.customerList = getAllCustomers();
+        //this.customerList = getAllCustomers();
         setCellValueFactory();
         loadCustomerTable();
     }
@@ -88,15 +88,14 @@ public class CustomerFormController {
     private void loadCustomerTable() {
 
         tblCustomers.getItems().clear();
-        
+
         try {
             /*Get all customers*/
             ArrayList<CustomerDTO>  allCustomers = customerBO.getAll();
             for (CustomerDTO c : allCustomers) {
                 tblCustomers.getItems().add(new CustomerTM(c.getId(), c.getName(), c.getTel(), c.getAddress()));
-
             }
-            } catch (SQLException e) {
+        } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         } catch (ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -107,7 +106,7 @@ public class CustomerFormController {
    /* private ArrayList<CustomerDTO> getAllCustomers() {
         ArrayList<CustomerDTO> customerList = null;
         try {
-            customerList = CustomerBO.getAll();
+            customerList = customerBO.getAll();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
@@ -126,20 +125,20 @@ public class CustomerFormController {
 
 //        CustomerDTO customer = new CustomerDTO(id, name, tel,address);
 
-       //if (isValid()) {
-            try {
-                boolean isSaved = customerBO.save(new CustomerDTO(id,name,tel,address));
-                if (isSaved) {
-                    new Alert(Alert.AlertType.CONFIRMATION, "customer saved!").show();
-                    initialize();
-                }
+        //if (isValid()) {
+        try {
+            boolean isSaved = customerBO.save(new CustomerDTO(id,name,tel,address));
+            if (isSaved) {
+                new Alert(Alert.AlertType.CONFIRMATION, "customer saved!").show();
+                initialize();
+            }
 //                customerBO.save(new CustomerDTO(id,name,tel,address));
 //                tblCustomers.getItems().add(new CustomerTM(id, name,tel, address));
-            } catch (SQLException e) {
-                new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         //}*/
     }
 
@@ -156,16 +155,18 @@ public class CustomerFormController {
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
-       /* String id = txtId.getText();
+        String id = txtId.getText();
 
         try {
-            boolean isDeleted = CustomerBO.delete(id);
+            boolean isDeleted = customerBO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "customer deleted!").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        }*/
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -176,7 +177,7 @@ public class CustomerFormController {
         String address = txtAddress.getText();
 
 
-//        CustomerDTO dto = new CustomerDTO(id, name, tel,address);
+//        CustomerDTO dto  = new CustomerDTO(id, name, tel,address);
 
         try {
 
@@ -203,7 +204,6 @@ public class CustomerFormController {
                 txtName.setText(customer.getName());
                 txtContact.setText(customer.getTel());
                 txtAddress.setText(customer.getAddress());
-
 
             }
         } catch (SQLException e) {

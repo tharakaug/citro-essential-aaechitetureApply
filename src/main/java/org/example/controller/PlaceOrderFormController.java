@@ -79,8 +79,8 @@ public class PlaceOrderFormController {
     @FXML
     private AnchorPane root;
 
-  //  @FXML
-  //  private TableView<CartTm> tblOrder;
+   // @FXML
+    //private TableView<CartTm> tblOrder;
 
     @FXML
     private JFXTextField txtDate;
@@ -91,7 +91,7 @@ public class PlaceOrderFormController {
     @FXML
     private JFXTextField txtQty;
 
-   /* private ObservableList<CartTm> cartList = FXCollections.observableArrayList();
+    //private ObservableList<CartTm> cartList = FXCollections.observableArrayList();
     private double netTotal = 0;
 
     public void initialize() {
@@ -113,7 +113,7 @@ public class PlaceOrderFormController {
     }
 
     private void getItemCodes() {
-        ObservableList<String> obList = FXCollections.observableArrayList();
+       /* ObservableList<String> obList = FXCollections.observableArrayList();
         try {
             List<String> codeList = ItemDAO.getId();
             for (String code : codeList) {
@@ -124,12 +124,12 @@ public class PlaceOrderFormController {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 
     private void getCustomerIds() {
 
-        ObservableList<String> obList = FXCollections.observableArrayList();
+     /*   ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
             List<String> idList = CustomerDAO.getId();
@@ -141,8 +141,8 @@ public class PlaceOrderFormController {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
-    }*/
+        }*/
+    }
 
     /*private void loadNextOrderId() {
         try {
@@ -167,9 +167,9 @@ public class PlaceOrderFormController {
     }*/
 
 
-  /*  @FXML
+    @FXML
     void btnAddtocartOnAction(ActionEvent event) {
-        String orderId = txtId.getText();
+       /* String orderId = txtId.getText();
         String orderDate = txtDate.getText();
         String itemId = cmbItemId.getValue();
         double unitPrice = Double.parseDouble(lblUnitPrice.getText());
@@ -199,38 +199,38 @@ public class PlaceOrderFormController {
 
         tblOrder.setItems(cartList);
         txtQty.setText("");
-        calculateNetTotal();
+        calculateNetTotal();*/
 
 
     }
 
     private void calculateNetTotal() {
-        netTotal = 0;
+      /*  netTotal = 0;
         for (int i = 0; i < tblOrder.getItems().size(); i++) {
             netTotal += (double) colTotal.getCellData(i);
         }
-        lblNetTotal.setText(String.valueOf(netTotal));
-    }*/
+        lblNetTotal.setText(String.valueOf(netTotal));*/
+    }
 
 
     @FXML
     void btnBackOnAction(ActionEvent event) throws IOException {
-        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/dashboard_form.fxml"));
+       /* AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/dashboard_form.fxml"));
         Stage stage = (Stage) root.getScene().getWindow();
 
         stage.setScene(new Scene(anchorPane));
         stage.setTitle("Dashboard Form");
-        stage.centerOnScreen();
+        stage.centerOnScreen();*/
     }
 
-  /*  @FXML
+    @FXML
     void btnDeleteOnAction(ActionEvent event) {
 
     }
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-        String orderId = txtId.getText();
+       /* String orderId = txtId.getText();
         String date = txtDate.getText();
         String cusId = cmbCusId.getValue();
 
@@ -261,12 +261,12 @@ public class PlaceOrderFormController {
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
-       // }
+       // }*/
     }
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        String id = txtId.getText();
+       /* String id = txtId.getText();
         String date = txtDate.getText();
         String cusId = cmbCusId.getValue();
 
@@ -279,12 +279,12 @@ public class PlaceOrderFormController {
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        }
+        }*/
     }
 
     @FXML
     void cmbCustomerIDOnAction(ActionEvent event) {
-        String cusId = cmbCusId.getValue();
+       /* String cusId = cmbCusId.getValue();
 
         try {
             Customer customer = CustomerDAO.searchById(cusId);
@@ -293,12 +293,12 @@ public class PlaceOrderFormController {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 
     @FXML
     void cmbItemIDOnAction(ActionEvent event) {
-        String itemId =  cmbItemId.getValue();
+       /* String itemId =  cmbItemId.getValue();
         try {
             Item item = ItemDAO.searchById(itemId);
             if (item != null) {
@@ -308,11 +308,11 @@ public class PlaceOrderFormController {
             throw new RuntimeException(e);
         }
 
-        txtQty.requestFocus();
+        txtQty.requestFocus();*/
     }
 
     public void btnPrintBillOnAction(ActionEvent actionEvent) {
-        HashMap hashmap = new HashMap<>();
+      /*  HashMap hashmap = new HashMap<>();
         hashmap.put("name", lblCusName.getText());
         hashmap.put("cusID", cmbCusId.getValue());
         hashmap.put("orderID", txtId.getText());
@@ -326,21 +326,21 @@ public class PlaceOrderFormController {
             JasperViewer.viewReport(jasperPrint, false);
         } catch (JRException e) {
             throw new RuntimeException(e);
-}
+}*/
     }
 
-  /*  public void txtOrderIDOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtId);
+    public void txtOrderIDOnKeyReleased(KeyEvent keyEvent) {
+      //  Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtId);
     }
 
     public void txtOrderQtyOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.QTY,txtQty);
+       // Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.QTY,txtQty);
     }
 
     public void txtOrderDateOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.DATE,txtDate);
+       // Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.DATE,txtDate);
     }
-    public boolean isValid(){
+   /* public boolean isValid(){
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtId)) return false;
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.DATE,txtDate)) return false;
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.QTY,txtQty)) return false;

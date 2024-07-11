@@ -38,7 +38,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     public  Customer searchById(String id) throws SQLException,ClassNotFoundException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM customer WHERE customer_cusID = ?",id+ "");
         rst.next();
-        return new Customer(id + "", rst.getString("name"), rst.getString("address"),rst.getString("tel"));
+        return new Customer(id + "", rst.getString("customer_name"), rst.getString("customer_address"),rst.getString("customer_cusContactNO"));
     }
 
     @Override

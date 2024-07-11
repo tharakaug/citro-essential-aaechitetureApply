@@ -27,7 +27,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM employee WHERE employee_empID = ?",emp_id+"") ;
         resultSet.next();
 
-        return new Employee(emp_id+"", resultSet.getString("name"), resultSet.getString("address"), resultSet.getString("tel"), resultSet.getString("mashId"));
+        return new Employee(emp_id+"", resultSet.getString("employee_name"), resultSet.getString("employee_address"), resultSet.getString("employee_contactNumber"), resultSet.getString("machine_mashID"));
         }
     @Override
     public boolean delete(String id) throws SQLException, ClassNotFoundException {
@@ -39,15 +39,15 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM employee") ;
 
         while (resultSet.next()) {
-            Employee employee = new Employee(resultSet.getString("id"), resultSet.getString("name"), resultSet.getString("address"), resultSet.getString("tel"), resultSet.getString("mashId"));
+            Employee employee = new Employee(resultSet.getString("employee_empID"), resultSet.getString("employee_name"), resultSet.getString("employee_address"), resultSet.getString("employee_contactNumber"), resultSet.getString("machine_mashID"));
             allEmployee.add(employee);
         }
         return allEmployee;
     }
 
 
-    public static List<String> getId() throws SQLException,ClassNotFoundException {
-        ResultSet resultSet = SQLUtil.execute("SELECT id FROM employee");
+    public  List<String> getId() throws SQLException,ClassNotFoundException {
+        ResultSet resultSet = SQLUtil.execute("SELECT machine_mashID FROM employee");
 
         List<String> idList = new ArrayList<>();
 

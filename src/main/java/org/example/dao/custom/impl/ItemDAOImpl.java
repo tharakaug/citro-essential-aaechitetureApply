@@ -34,7 +34,7 @@ public class ItemDAOImpl implements ItemDAO {
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM product WHERE product_proID = ?",pro_id+"");
         resultSet.next();
         
-            return new Item(pro_id+"", resultSet.getString("name"),resultSet.getDouble("price"),resultSet.getInt("qty"));
+            return new Item(pro_id+"", resultSet.getString("product_proname"),resultSet.getDouble("product_price"),resultSet.getInt("product_proQTY"));
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ItemDAOImpl implements ItemDAO {
 
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM product");
         while (resultSet.next()) {
-            Item item = new Item(resultSet.getString("id"), resultSet.getString("name"), resultSet.getDouble("price"),resultSet.getInt("qty"));
+            Item item = new Item(resultSet.getString("product_proID"), resultSet.getString("product_proname"), resultSet.getDouble("product_price"),resultSet.getInt("product_proQTY"));
             allItem.add(item);
         }
         return allItem;

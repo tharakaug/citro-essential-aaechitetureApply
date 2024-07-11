@@ -20,8 +20,11 @@ import org.example.bo.custom.CustomerBO;
 import org.example.bo.custom.EmployeeBO;
 import org.example.dao.custom.EmployeeDAO;
 import org.example.dao.custom.MachineDAO;
+import org.example.dto.CustomerDTO;
+import org.example.dto.EmployeeDTO;
 import org.example.entity.Employee;
 import org.example.entity.Machine;
+import org.example.view.tdm.CustomerTM;
 import org.example.view.tdm.EmployeeTM;
 /*import lk.ijse.citroessentional.Util.Regex;
 import lk.ijse.citroessentional.model.Employee;
@@ -52,8 +55,8 @@ public class EmployeeFormController {
     @FXML
     private AnchorPane root;
 
-  //  @FXML
-  //  private TableView<EmployeeTm> tblEmployee;
+    @FXML
+    private TableView<EmployeeTM> tblEmployee;
 
     @FXML
     private JFXTextField txtAddress;
@@ -74,21 +77,30 @@ public class EmployeeFormController {
     //private List<Employee> employeeList = new ArrayList<>();
     EmployeeBO employeeBO  = (EmployeeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.EMPLOYEE);
 
-  /*  public void initialize() throws SQLException {
-        this.employeeList = getAllemployee();
+    public void initialize() throws SQLException {
+        //this.employeeList = getAllemployee();
         setCellValueFactory();
         loadEmployeeTable();
-        setComboBoxValue();
+         setComboBoxValue();
     }
 
-    private void setComboBoxValue() throws SQLException {
-        List<Machine> all = MachineDAO.getAll();
+    private void setComboBoxValue()  {
+        ObservableList<String> obList = FXCollections.observableArrayList();
 
-            ObservableList obList = FXCollections.observableArrayList();
-        for (Machine machine :all) {
-            obList.add(machine.getId());
+        List<String> all = null;
+        try {
+            all = employeeBO.getAllMachineId();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
-        cmbMachineID.setItems(obList);
+
+        for (String id : all) {
+                obList.add(id);
+            }
+            cmbMachineID.setItems(obList);
+
     }
 
     private void setCellValueFactory() {
@@ -99,32 +111,32 @@ public class EmployeeFormController {
     }
 
     private void loadEmployeeTable() {
-        ObservableList<EmployeeTm> tmList = FXCollections.observableArrayList();
 
-        for (Employee employee : employeeList) {
-            EmployeeTm employeeTm = new EmployeeTm(
-                    employee.getId(),
-                    employee.getName(),
-                    employee.getTel(),
-                    employee.getAddress()
-            );
+        tblEmployee.getItems().clear();
+        try{
+            ArrayList<EmployeeDTO>  allEmployee = employeeBO.getAll();
 
-            tmList.add(employeeTm);
+            for (EmployeeDTO c : allEmployee) {
+                tblEmployee.getItems().add(new EmployeeTM(c.getId(), c.getName(), c.getTel(), c.getAddress(), c.getMashId()));}
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
-        tblEmployee.setItems(tmList);
-        EmployeeTm selectedItem = (EmployeeTm) tblEmployee.getSelectionModel().getSelectedItem();
-        System.out.println("selectedItem = " + selectedItem);
     }
 
-    private List<Employee> getAllemployee() {
-        List<Employee> employeeList = null;
+
+    /*private ArrayList<EmployeeDTO> getAllemployee() {
+        ArrayList<EmployeeDTO> employeeList = null;
         try {
             employeeList = EmployeeDAO.getAll();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
         return employeeList;
-    }
+    }*/
 
     @FXML
     void btnAddOnAction(ActionEvent event) {
@@ -134,20 +146,24 @@ public class EmployeeFormController {
         String tel = txtContact.getText();
         String mashId = cmbMachineID.getValue();
 
-        Employee employee = new Employee(id, name, address, tel,mashId);
+        //   Employee employee = new Employee(id, name, address, tel,mashId);
 
-       // if (isValid()) {
-            try {
-                boolean isSaved = EmployeeDAO.save(employee);
-                if (isSaved) {
-                    new Alert(Alert.AlertType.CONFIRMATION, "employee saved!").show();
-                   // loadEmployeeTable();
-                }
-            } catch (SQLException e) {
-                new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        // if (isValid()) {
+        try {
+            boolean isSaved = employeeBO.save(new EmployeeDTO(id, name, address, tel, mashId));
+            if (isSaved) {
+                new Alert(Alert.AlertType.CONFIRMATION, "employee saved!").show();
+                // loadEmployeeTable();
+                initialize();
+
             }
-       // }
-    }*/
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+            // }
+        }
+    }
 
     @FXML
     void btnBackOnAction(ActionEvent event) throws IOException {
@@ -160,17 +176,19 @@ public class EmployeeFormController {
 
     }
 
-   /* @FXML
-    void btnDeleteOnAction(ActionEvent event) {
+    @FXML
+    void btnDeleteOnAction(ActionEvent event) throws SQLException,ClassNotFoundException {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = EmployeeDAO.delete(id);
+            boolean isDeleted = employeeBO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "employee deleted!").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -182,15 +200,17 @@ public class EmployeeFormController {
         String tel = txtContact.getText();
         String mashId = cmbMachineID.getValue();
 
-        Employee employee = new Employee(id, name, address, tel,mashId);
+        //  Employee employee = new Employee(id, name, address, tel,mashId);
 
         try {
-            boolean isUpdated = EmployeeDAO.update(employee);
+            boolean isUpdated = employeeBO.update(new EmployeeDTO(id,name,address,tel,mashId));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "employee updated!").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -199,7 +219,7 @@ public class EmployeeFormController {
         String id = txtId.getText();
 
         try {
-            Employee employee = EmployeeDAO.searchById(id);
+            Employee employee = employeeBO.searchById(id);
 
             if (employee != null) {
                 txtId.setText(employee.getId());
@@ -209,23 +229,25 @@ public class EmployeeFormController {
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
-   /*public void txtEmployeeIDOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtId);
-    }*/
-   /* public void txtEmployeeNameOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.NAME,txtName);
-    }*/
+    public void txtEmployeeIDOnKeyReleased(KeyEvent keyEvent) {
+        // Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtId);
+    }
+    public void txtEmployeeNameOnKeyReleased(KeyEvent keyEvent) {
+        //     Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.NAME,txtName);
+    }
 
-   /* public void txtEmployeeAddressOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ADDRESS,txtAddress);
-    }*/
+    public void txtEmployeeAddressOnKeyReleased(KeyEvent keyEvent) {
+        //   Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ADDRESS,txtAddress);
+    }
 
-  /*  public void txtEmplooyeeContactOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.CONTACT,txtContact);
-    }*/
+    public void txtEmplooyeeContactOnKeyReleased(KeyEvent keyEvent) {
+        //    Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.CONTACT,txtContact);
+    }
 
 
    /* public boolean isValid(){
@@ -237,7 +259,7 @@ public class EmployeeFormController {
         return true;
     }*/
 
-  /*  public void cmbMachineIDOnAction(ActionEvent actionEvent) {
+    public void cmbMachineIDOnAction(ActionEvent actionEvent) {
 
-    }*/
+    }
 }

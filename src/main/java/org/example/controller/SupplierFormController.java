@@ -14,8 +14,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.example.bo.BOFactory;
+import org.example.bo.custom.CustomerBO;
+import org.example.bo.custom.SupplierBO;
 import org.example.dao.custom.SupplierDAO;
+import org.example.dto.CustomerDTO;
+import org.example.dto.SupplierDTO;
 import org.example.entity.Supplier;
+import org.example.view.tdm.SupplierTM;
 /*import lk.ijse.citroessentional.Util.Regex;
 import lk.ijse.citroessentional.model.Supplier;
 import lk.ijse.citroessentional.model.tm.SupplierTm;
@@ -40,8 +46,8 @@ public class SupplierFormController {
     @FXML
     private AnchorPane root;
 
-  //  @FXML
-  //  private TableView<SupplierTm> tblSupplier;
+    @FXML
+    private TableView<SupplierTM> tblSupplier;
 
     @FXML
     private JFXTextField txtContact;
@@ -52,10 +58,11 @@ public class SupplierFormController {
     @FXML
     private JFXTextField txtName;
 
-    private List<Supplier> supplierList = new ArrayList<>();
+    //private List<Supplier> supplierList = new ArrayList<>();
+    SupplierBO supplierBO = (SupplierBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.SUPPLIER);
 
-  /*  public void initialize() {
-        this.supplierList = getAllSupplier();
+    public void initialize() {
+        //this.supplierList = getAllSupplier();
         setCellValueFactory();
         loadSupplierTable();
     }
@@ -67,23 +74,24 @@ public class SupplierFormController {
     }
 
     private void loadSupplierTable() {
-        ObservableList<SupplierTm> tmList = FXCollections.observableArrayList();
 
-        for (Supplier supplier : supplierList) {
-            SupplierTm supplierTm = new SupplierTm(
-                    supplier.getId(),
-                    supplier.getName(),
-                    supplier.getTel()
-            );
+        tblSupplier.getItems().clear();
 
-            tmList.add(supplierTm);
+try{
+
+    ArrayList<SupplierDTO>  allSupplier = supplierBO.getAll();
+
+        for (SupplierDTO c : allSupplier) {
+            tblSupplier.getItems().add(new SupplierTM(c.getId(),c.getName(),c.getTel()));
         }
-        tblSupplier.setItems(tmList);
-        SupplierTm selectedItem = (SupplierTm) tblSupplier.getSelectionModel().getSelectedItem();
-        System.out.println("selectedItem = " + selectedItem);
+} catch (SQLException e) {
+    new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+} catch (ClassNotFoundException e) {
+    new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+}
     }
 
-    private List<Supplier> getAllSupplier() {
+   /* private List<Supplier> getAllSupplier() {
         List<Supplier> suppierList = null;
         try {
             suppierList = SupplierDAO.getAll();
@@ -91,7 +99,7 @@ public class SupplierFormController {
             throw new RuntimeException(e);
         }
         return suppierList;
-    }
+    }*/
 
     @FXML
     void btnAddOnAction(ActionEvent event) {
@@ -99,19 +107,22 @@ public class SupplierFormController {
         String name = txtName.getText();
         String tel = txtContact.getText();
 
-        Supplier supplier = new Supplier(id, name, tel);
+        //Supplier supplier = new Supplier(id, name, tel);
 
         //if (isValid()) {
             try {
-                boolean isSaved = SupplierDAO.save(supplier);
+                boolean isSaved = supplierBO.save(new SupplierDTO(id,name,tel));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "supplier saved!").show();
+                    initialize();
                 }
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+            }catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
       //  }
-    }*/
+    }
 
     @FXML
     void btnBackOnAction(ActionEvent event)throws IOException {
@@ -124,17 +135,19 @@ public class SupplierFormController {
 
     }
 
-  /*  @FXML
+    @FXML
     void btnDeleteOnAction(ActionEvent event) {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = SupplierDAO.delete(id);
+            boolean isDeleted = supplierBO.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "supplier deleted!").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -147,15 +160,17 @@ public class SupplierFormController {
         String tel = txtContact.getText();
 
 
-        Supplier supplier = new Supplier(id, name, tel);
+       // Supplier supplier = new Supplier(id, name, tel);
 
         try {
-            boolean isUpdated = SupplierDAO.update(supplier);
+            boolean isUpdated = supplierBO.update(new SupplierDTO(id,name,tel));
             if (isUpdated) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Supplier updated!").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -165,7 +180,7 @@ public class SupplierFormController {
         String id = txtId.getText();
 
         try {
-            Supplier supplier = SupplierDAO.searchById(id);
+            Supplier supplier = supplierBO.searchById(id);
 
             if (supplier != null) {
                 txtId.setText(supplier.getId());
@@ -176,23 +191,24 @@ public class SupplierFormController {
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    /*public void txtSupcontactOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.CONTACT, txtContact);
+    public void txtSupcontactOnKeyReleased(KeyEvent keyEvent) {
+      //  Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.CONTACT, txtContact);
     }
 
     public void txtSupIDOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID, txtId);
+        //Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID, txtId);
     }
 
     public void txtSupNameOnKeyReleased(KeyEvent keyEvent) {
-        Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.NAME, txtName
-        );
+        //Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.NAME, txtName);
     }
 
-    public boolean isValid(){
+   /* public boolean isValid(){
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.ID,txtId)) return false;
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.NAME,txtName)) return false;
         if (!Regex.setTextColor(lk.ijse.citroessentional.Util.TextField.CONTACT,txtContact)) return false;
